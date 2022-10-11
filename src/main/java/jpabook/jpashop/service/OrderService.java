@@ -48,7 +48,7 @@ public class OrderService {
 	}
 
 	/**
-	 * 취소
+	 * 주문 취소
 	 */
 	@Transactional
 	public void cancelOrder(Long orderId) {
@@ -60,7 +60,7 @@ public class OrderService {
 	}
 
 	/*
-	 * TODO : 검색
+	 * TODO : 주문 검색
 	 */
 	
 	/*
