@@ -99,4 +99,5 @@ public class OrderRepository {
 		return query.getResultList();
 	}
 
+	/* 방법 3 Querydsl */
 }
