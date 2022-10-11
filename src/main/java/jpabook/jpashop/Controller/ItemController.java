@@ -62,7 +62,7 @@ public class ItemController {
 
 	/** * 상품 수정 */
 	@PostMapping(value = "/items/{itemId}/edit")
-	public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
+	public String updateItem(@PathVariable("itemId") Long itemId, @ModelAttribute("form") BookForm form) {
 		// 더 나은 설계
 		itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
 		return "redirect:/items";
