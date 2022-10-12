@@ -34,6 +34,7 @@ public class MemberApiController {
 	 * - API 응답 스펙에 맞추어 별도의 DTO를 반환한다.
 	 조회 V1: 안 좋은 버전, 모든 엔티티가 노출, @JsonIgnore -> 이건 정말 최악, api가 이거
 	하나인가! 화면에 종속적이지 마라!
+	
 	 */
 	
 	@PostMapping("/api/v1/members")
