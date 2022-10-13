@@ -73,11 +73,10 @@ public class OrderRepository {
 		return query.getResultList();
 	}
 
-	/* 방법 2 JPA Criteria로 처리
-	 * JPA Criteria는 JPA 표준 스펙
-	 * 실무에서 사용하기에 복잡
-	 * 가장 멋진 해결책은 Querydsl
-	 *  */
+	/*
+	 * 방법 2 JPA Criteria로 처리 JPA Criteria는 JPA 표준 스펙 실무에서 사용하기에 복잡 가장 멋진 해결책은
+	 * Querydsl
+	 */
 	public List<Order> findAllByCriteria(OrderSearch orderSearch) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Order> cq = cb.createQuery(Order.class);
@@ -97,6 +96,13 @@ public class OrderRepository {
 		cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
 		TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); // 최대 1000건
 		return query.getResultList();
+	}
+
+	public List<Order> findAllWithMemberDelivery() {
+		return em.createQuery("select o from Order o"
+							+ " join fetch o.member m"
+							+ " join fetch o.delivery d", Order.class)
+				.getResultList();
 	}
 
 	/* 방법 3 Querydsl */
