@@ -12,6 +12,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.BatchSize;
+
 import jpabook.jpashop.domain.Category;
 import jpabook.jpashop.excpetion.NotEnoughtStockException;
 import lombok.Getter;
