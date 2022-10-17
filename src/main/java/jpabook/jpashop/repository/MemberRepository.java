@@ -2,38 +2,13 @@ package jpabook.jpashop.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import jpabook.jpashop.domain.Member;
-import lombok.RequiredArgsConstructor;
 
-@Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long>{
 	
-	
-	//@PersistenceContext  : EntityManager injection >> @RequiredArgsConstructor 생성자 방식으로 변경
-	private final EntityManager em;
+	// select m from Member m where m.name = ? 
+	List<Member> findByName(String name);
 
-	public void save(Member member) {
-		em.persist(member);
-	}
-
-	public Member findOne(Long id) {
-		return em.find(Member.class, id);
-	}
-
-	public List<Member> findAll() {
-		return em.createQuery("select m from Member m", Member.class)
-				.getResultList();
-	}
-
-	public List<Member> findByName(String name) {
-		return em.createQuery("select m from Member m where m.name = :name", Member.class)
-				.setParameter("name", name)
-				.getResultList();
-	}
 }
