@@ -75,11 +75,25 @@ public class OrderApiController {
 				.collect(toList());
 		return result;
 	}
-
+	
+	/**
+	 * 주문 조회 V4: JPA에서 DTO 직접 조회
+	 */
+	
 	@GetMapping("/api/v4/orders")
 	public List<OrderQueryDto> ordersV4() {
 	 return orderQueryRepository.findOrderQueryDtos();
 	}
+	
+	/**
+	 * 주문 조회 V5: JPA에서 DTO 직접 조회 - 컬렉션 조회 최적화
+	 */
+	
+	@GetMapping("/api/v5/orders")
+	public List<OrderQueryDto> ordersV5() {
+	 return orderQueryRepository.findAllByDto_optimization();
+	}
+
 
 	
 	@Data
