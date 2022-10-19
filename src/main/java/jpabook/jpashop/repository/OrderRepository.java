@@ -1,5 +1,8 @@
 package jpabook.jpashop.repository;
 
+import static jpabook.jpashop.domain.QMember.member;
+import static jpabook.jpashop.domain.QOrder.order;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +18,25 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
-import lombok.RequiredArgsConstructor;
+import jpabook.jpashop.domain.OrderStatus;
+import jpabook.jpashop.domain.QMember;
+import jpabook.jpashop.domain.QOrder;
 
 @Repository
-@RequiredArgsConstructor
 public class OrderRepository {
 	private final EntityManager em;
-
+	private JPAQueryFactory query;
+	
+		public OrderRepository(EntityManager em) {
+			this.em = em;
+			this.query = new JPAQueryFactory(em);
+		}
+		
 	public void save(Order order) {
 		em.persist(order);
 	}
@@ -97,6 +110,38 @@ public class OrderRepository {
 		TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); // 최대 1000건
 		return query.getResultList();
 	}
+	
+	//QueryDSL 사용
+	  public List<Order> findAll(OrderSearch orderSearch){
+		  //static import
+//		  QOrder order = QOrder.order;
+//		  QMember member = QMember.member;
+//		  JPAQueryFactory query = new JPAQueryFactory(em);
+		  
+		  return query
+				  .select(order)
+				  .from(order)
+				  .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+				  .join(order.member, member)
+				  .limit(1000)
+				  .fetch();
+	  }
+
+
+	private BooleanExpression nameLike(String memberName) {
+		if (!StringUtils.hasText(memberName)) {
+			return null;
+		}
+		return QMember.member.name.like(memberName);
+	}
+
+	private BooleanExpression statusEq(OrderStatus statusCond) {
+		  if (statusCond == null) {
+			return null;
+		}
+		  return QOrder.order.status.eq(statusCond);
+	  }
+	 
 
 	public List<Order> findAllWithMemberDelivery() {
 		return em.createQuery("select o from Order o"
@@ -125,6 +170,8 @@ public class OrderRepository {
 					+ "join fetch oi.item i", Order.class)
 				.getResultList();
 	}
+
+
 
 
 
